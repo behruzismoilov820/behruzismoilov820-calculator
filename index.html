@@ -121,13 +121,14 @@ HTML
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-decoration: none;
         }
         .app-btn:hover {
             transform: translateY(-2px);
             opacity: 0.95;
         }
 
-        /* O'ng Tomondagi Sayt Oynasi */
+        /* O'ng Tomondagi Sayt/O'yin Oynasi */
         .vault-content {
             flex: 1;
             height: 100%;
@@ -209,22 +210,27 @@ HTML
         <div class="vault-sidebar">
             <h2>🔒 Ombor</h2>
             
-            <button class="app-btn" style="background: #10b981;" onclick="openSite('https://play-cs.com/')">🎮 CS 1.6 Web</button>
-            <button class="app-btn" style="background: #fc3f1d;" onclick="openSite('https://yandex.com/games')">🕹️ Yandex Games</button>
-            <button class="app-btn" style="background: #2563eb;" onclick="openSite('https://www.bing.com')">🌐 Qidiruv (Google/Bing)</button>
-            <button class="app-btn" style="background: #cc181e;" onclick="openSite('https://www.youtube-nocookie.com/embed?listType=playlist')">▶️ YouTube</button>
-            <button class="app-btn" style="background: #24292e;" onclick="openSite('https://github.com/behruzismoilov820')">🐙 GitHub</button>
-            <button class="app-btn" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);" onclick="openSite('https://www.instagram.com/embed.js')">📸 Instagram</button>
+            <!-- O'ng tomondagi ekran ichida ochiladigan o'yinlar -->
+            <button class="app-btn" style="background: #10b981;" onclick="openGame('https://play-cs.com/')">🎮 CS 1.6 Web (Ichkarida)</button>
+            <button class="app-btn" style="background: #fc3f1d;" onclick="openGame('https://yandex.com/games')">🕹️ Yandex Games (Ichkarida)</button>
+            
+            <hr style="border: 0.5px solid rgba(255,255,255,0.1); width: 100%; margin: 15px 0;">
+
+            <!-- Yangi oynada ochiladigan tashqi veb-saytlar -->
+            <a href="https://google.com" target="_blank" class="app-btn" style="background: #2563eb;">🌐 Google</a>
+            <a href="https://youtube.com" target="_blank" class="app-btn" style="background: #cc181e;">▶️ YouTube</a>
+            <a href="https://github.com/behruzismoilov820" target="_blank" class="app-btn" style="background: #24292e;">🐙 GitHub</a>
+            <a href="https://instagram.com" target="_blank" class="app-btn" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">📸 Instagram</a>
             
             <button onclick="lockVault()" class="lock-btn">Qulflash</button>
         </div>
 
-        <!-- O'ng tomonda sayt avtomatik ochiladigan oyna -->
+        <!-- O'ng tomonda o'yin ochiladigan joy -->
         <div class="vault-content">
-            <iframe id="siteViewer" src="" style="display:none;"></iframe>
+            <iframe id="gameViewer" src="" style="display:none;"></iframe>
             <div id="placeholder" class="placeholder-text">
-                <h3>👈 Chap tomondan ilovani tanlang</h3>
-                <p>Saytlar shu yerning o'zida avtomatik ravishda yuklanadi.</p>
+                <h3>🎮 O'yinlarni tanlang</h3>
+                <p>CS 1.6 Web yoki Yandex Games o'ng tomonda to'g'ridan-to'g'ri ochiladi!</p>
             </div>
         </div>
     </div>
@@ -235,7 +241,7 @@ HTML
         let display = document.getElementById('display');
         let calculator = document.getElementById('calculator');
         let vault = document.getElementById('vault');
-        let siteViewer = document.getElementById('siteViewer');
+        let gameViewer = document.getElementById('gameViewer');
         let placeholder = document.getElementById('placeholder');
 
         function press(val) {
@@ -251,8 +257,8 @@ HTML
                 calculator.style.display = 'none';
                 vault.style.display = 'flex';
                 clearDisplay();
-                // Birinchi kirganda avtomatik CS 1.6 ochib beradi
-                openSite('https://play-cs.com/');
+                // Ombor ochilganda avtomatik CS 1.6 ni o'ng tomonga yuklaydi
+                openGame('https://play-cs.com/');
                 return;
             }
             
@@ -263,17 +269,17 @@ HTML
             }
         }
 
-        function openSite(url) {
+        function openGame(url) {
             placeholder.style.display = 'none';
-            siteViewer.style.display = 'block';
-            siteViewer.src = url;
+            gameViewer.style.display = 'block';
+            gameViewer.src = url;
         }
 
         function lockVault() {
             vault.style.display = 'none';
             calculator.style.display = 'block';
-            siteViewer.src = "";
-            siteViewer.style.display = 'none';
+            gameViewer.src = "";
+            gameViewer.style.display = 'none';
             placeholder.style.display = 'block';
             clearDisplay();
         }
