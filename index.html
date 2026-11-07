@@ -26,7 +26,7 @@ HTML
             color: #fff;
         }
 
-        /* Kalkulyator Qismi (Boshlang'ich markazda) */
+        /* Kalkulyator Qismi */
         .calc-container {
             background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(15px);
@@ -77,7 +77,7 @@ HTML
         button.clear { background: #ef4444; color: white; }
         button.clear:hover { background: #dc2626; }
 
-        /* Yashirin Ombor Asosiy Oynasi (Chapda Menyu + O'ngda Sayt Ekran) */
+        /* Yashirin Ombor Oynasi */
         .vault-wrapper {
             display: none;
             width: 95vw;
@@ -144,10 +144,13 @@ HTML
             width: 100%;
             height: 100%;
             border: none;
+            background: #fff;
         }
         .placeholder-text {
-            color: #64748b;
-            font-size: 20px;
+            color: #94a3b8;
+            font-size: 18px;
+            text-align: center;
+            padding: 20px;
         }
 
         .lock-btn {
@@ -200,25 +203,29 @@ HTML
         </div>
     </div>
 
-    <!-- Yashirin Ombor Oynasi (Menyu + Ekran) -->
+    <!-- Yashirin Ombor Oynasi -->
     <div class="vault-wrapper" id="vault">
         <!-- Chap Menyu -->
         <div class="vault-sidebar">
             <h2>🔒 Ombor</h2>
-            <button class="app-btn" onclick="openSite('https://play-cs.com/')">CS 1.6 Web</button>
-            <button class="app-btn" style="background: #fc3f1d;" onclick="openSite('https://yandex.com/games')">Yandex Games</button>
-            <button class="app-btn" style="background: #2563eb;" onclick="openSite('https://google.com')">Google</button>
-            <button class="app-btn" style="background: #cc181e;" onclick="openSite('https://youtube.com')">YouTube</button>
-            <button class="app-btn" style="background: #24292e;" onclick="openSite('https://github.com')">GitHub</button>
-            <button class="app-btn" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);" onclick="openSite('https://instagram.com')">Instagram</button>
+            
+            <button class="app-btn" style="background: #10b981;" onclick="openSite('https://play-cs.com/')">🎮 CS 1.6 Web</button>
+            <button class="app-btn" style="background: #fc3f1d;" onclick="openSite('https://yandex.com/games')">🕹️ Yandex Games</button>
+            <button class="app-btn" style="background: #2563eb;" onclick="openSite('https://www.bing.com')">🌐 Qidiruv (Google/Bing)</button>
+            <button class="app-btn" style="background: #cc181e;" onclick="openSite('https://www.youtube-nocookie.com/embed?listType=playlist')">▶️ YouTube</button>
+            <button class="app-btn" style="background: #24292e;" onclick="openSite('https://github.com/behruzismoilov820')">🐙 GitHub</button>
+            <button class="app-btn" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);" onclick="openSite('https://www.instagram.com/embed.js')">📸 Instagram</button>
             
             <button onclick="lockVault()" class="lock-btn">Qulflash</button>
         </div>
 
-        <!-- O'ng tomonda sayt ochiladigan joy -->
+        <!-- O'ng tomonda sayt avtomatik ochiladigan oyna -->
         <div class="vault-content">
             <iframe id="siteViewer" src="" style="display:none;"></iframe>
-            <div id="placeholder" class="placeholder-text">O'ng tomonda ko'rish uchun chapdan ilovani tanlang 👈</div>
+            <div id="placeholder" class="placeholder-text">
+                <h3>👈 Chap tomondan ilovani tanlang</h3>
+                <p>Saytlar shu yerning o'zida avtomatik ravishda yuklanadi.</p>
+            </div>
         </div>
     </div>
 
@@ -244,6 +251,8 @@ HTML
                 calculator.style.display = 'none';
                 vault.style.display = 'flex';
                 clearDisplay();
+                // Birinchi kirganda avtomatik CS 1.6 ochib beradi
+                openSite('https://play-cs.com/');
                 return;
             }
             
