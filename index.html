@@ -19,14 +19,15 @@ HTML
             width: 100vw;
             margin: 0;
             padding: 20px;
-            /* Chiroyli zamonaviy gradient fon */
             background: linear-gradient(135deg, #0f172a, #1e293b, #3b82f6);
             background-size: cover;
             background-attachment: fixed;
             color: #fff;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Kalkulyator qismi - Katta va keng qilib belgilandi */
+        /* Kalkulyator Qismi */
         .calc-container {
             background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(12px);
@@ -76,42 +77,91 @@ HTML
         button.operator:hover { background: #d97706; }
         button.clear { background: #ef4444; color: white; }
         button.clear:hover { background: #dc2626; }
-        
-        /* Yashirin ombor qismi */
-        .vault-container {
+
+        /* Chap Tarafdagi Menyu Tugmasi */
+        .menu-btn {
             display: none;
-            text-align: center;
-            background: rgba(30, 41, 59, 0.9);
-            backdrop-filter: blur(12px);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            font-size: 20px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .menu-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Tepadan Pastga Tushuvchi Menyu Paneli */
+        .sidebar-menu {
+            position: fixed;
+            top: -100%;
+            left: 20px;
+            width: 320px;
+            max-width: calc(100vw - 40px);
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 450px;
-            max-width: 95vw;
+            transition: top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
         }
-        .vault-container h2 {
+        .sidebar-menu.active {
+            top: 80px;
+        }
+
+        .sidebar-menu h2 {
             margin-top: 0;
+            margin-bottom: 20px;
             color: #4ade80;
-            font-size: 26px;
+            text-align: center;
+            font-size: 22px;
         }
-        .app-icon {
-            display: inline-block;
-            margin: 10px;
-            padding: 15px 25px;
+
+        /* Havolalarning Maydonni To'liq Egallashi */
+        .app-link {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 12px;
             background: #2563eb;
             color: white;
             text-decoration: none;
-            border-radius: 14px;
-            font-size: 18px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: bold;
+            text-align: center;
             transition: all 0.2s ease;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .app-icon:hover {
-            transform: scale(1.08);
+        .app-link:hover {
+            transform: translateY(-2px);
             opacity: 0.95;
         }
+
+        .lock-btn {
+            background: #ef4444;
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
         .counter-footer {
             margin-top: 30px;
             opacity: 0.85;
@@ -119,6 +169,21 @@ HTML
     </style>
 </head>
 <body>
+
+    <!-- Chap Yuqoridagi Menyu Tugmasi -->
+    <button class="menu-btn" id="menuToggleBtn" onclick="toggleMenu()">☰ Menyu</button>
+
+    <!-- Tepadan Tushib Keladigan Menyu (Ombor) -->
+    <div class="sidebar-menu" id="sidebarMenu">
+        <h2>🔒 Yashirin Ombor</h2>
+        <a href="https://google.com" target="_blank" class="app-link">Google</a>
+        <a href="https://youtube.com" target="_blank" class="app-link">YouTube</a>
+        <a href="https://github.com" target="_blank" class="app-link">GitHub</a>
+        <a href="https://instagram.com" target="_blank" class="app-link" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">Instagram</a>
+        <a href="https://yandex.com/games" target="_blank" class="app-link" style="background: #fc3f1d;">Yandex Games</a>
+        <a href="https://play-cs.com/" target="_blank" class="app-link" style="background: #10b981;">CS 1.6 Web</a>
+        <button onclick="lockVault()" class="lock-btn">Qulflash</button>
+    </div>
 
     <!-- Kalkulyator Qismi -->
     <div class="calc-container" id="calculator">
@@ -146,28 +211,18 @@ HTML
         </div>
     </div>
 
-    <!-- Yashirin Ombor Qismi (Parol: 1995) -->
-    <div class="vault-container" id="vault">
-        <h2>🔒 Yashirin Ombor Ochildi!</h2>
-        <p style="font-size: 18px; margin-bottom: 20px;">Maxsus ilova va o'yinlar ro'yxati:</p>
-        <a href="https://google.com" target="_blank" class="app-icon">Google</a>
-        <a href="https://youtube.com" target="_blank" class="app-icon">YouTube</a>
-        <a href="https://github.com" target="_blank" class="app-icon">GitHub</a>
-        <a href="https://instagram.com" target="_blank" class="app-icon" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">Instagram</a>
-        <a href="https://yandex.com/games" target="_blank" class="app-icon" style="background: #fc3f1d;">Yandex Games</a>
-        <a href="https://play-cs.com/" target="_blank" class="app-icon" style="background: #10b981;">CS 1.6 Web</a>
-        <br><br>
-        <button onclick="lockVault()" style="background: #ef4444; color: white; padding: 15px; border-radius: 14px; border: none; cursor: pointer; font-weight: bold; font-size: 18px; width: 100%;">Qulflash</button>
-    </div>
-
-    <!-- Tashriflar nishoni -->
+    <!-- Tashriflar Nishoni -->
     <div class="counter-footer">
         <img src="https://komarev.com/ghpvc/?username=behruzismoilov820-calcualtor&label=Tashriflar&color=blue&style=flat" alt="Tashriflar soni">
     </div>
 
     <script>
+        // HOXLAGAN PAROLINGIZNI SHU YERGA YOZING:
+        const USER_PASSWORD = "1995"; 
+
         let display = document.getElementById('display');
-        const secretPassword = "1995"; 
+        let menuBtn = document.getElementById('menuToggleBtn');
+        let sidebarMenu = document.getElementById('sidebarMenu');
 
         function press(val) {
             display.value += val;
@@ -178,9 +233,9 @@ HTML
         }
 
         function calculate() {
-            if (display.value === secretPassword) {
-                document.getElementById('calculator').style.display = 'none';
-                document.getElementById('vault').style.display = 'block';
+            if (display.value === USER_PASSWORD) {
+                menuBtn.style.display = 'block';
+                sidebarMenu.classList.add('active');
                 clearDisplay();
                 return;
             }
@@ -192,9 +247,13 @@ HTML
             }
         }
 
+        function toggleMenu() {
+            sidebarMenu.classList.toggle('active');
+        }
+
         function lockVault() {
-            document.getElementById('calculator').style.display = 'block';
-            document.getElementById('vault').style.display = 'none';
+            sidebarMenu.classList.remove('active');
+            menuBtn.style.display = 'none';
         }
     </script>
 </body>
