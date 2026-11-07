@@ -14,21 +14,19 @@ HTML
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            flex-direction: column;
             justify-content: center;
-            align-items: flex-start; /* Ombor va kalkulyatorni chap tomonga joylashtirish */
+            align-items: center;
             min-height: 100vh;
             width: 100vw;
             margin: 0;
-            padding: 40px;
-            /* Asosiy fon rasmi (o'ng va markaziy qismda ko'rinadi) */
-            background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.6)), 
-                        url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f172a, #1e293b, #3b82f6);
             background-size: cover;
+            background-attachment: fixed;
             color: #fff;
         }
 
-        /* Kalkulyator Qismi */
+        /* Kalkulyator Qismi (Boshlang'ich markazda) */
         .calc-container {
             background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(15px);
@@ -79,75 +77,95 @@ HTML
         button.clear { background: #ef4444; color: white; }
         button.clear:hover { background: #dc2626; }
 
-        /* Yashirin Ombor Qismi (Chap tarafda ochiladi) */
-        .vault-container {
+        /* Yashirin Ombor Asosiy Oynasi (Chapda Menyu + O'ngda Sayt Ekran) */
+        .vault-wrapper {
             display: none;
-            text-align: center;
+            width: 95vw;
+            height: 90vh;
+            gap: 20px;
+        }
+
+        /* Chap Menyu */
+        .vault-sidebar {
+            width: 320px;
+            min-width: 280px;
+            height: 100%;
             background: rgba(30, 41, 59, 0.9);
             backdrop-filter: blur(15px);
-            padding: 40px;
+            padding: 25px;
             border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 400px;
-            max-width: 90vw;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
         }
-        .vault-container h2 {
+        .vault-sidebar h2 {
             margin-top: 0;
             color: #4ade80;
-            font-size: 26px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            text-align: center;
         }
-        .vault-container p {
-            color: #94a3b8;
-            margin-bottom: 25px;
-            font-size: 16px;
-        }
-
-        /* Havolalar (maydonni to'liq egallaydi) */
-        .app-link {
+        .app-btn {
             display: block;
             width: 100%;
-            padding: 16px;
-            margin-bottom: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
             background: #2563eb;
             color: white;
-            text-decoration: none;
+            border: none;
             border-radius: 14px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             text-align: center;
+            cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .app-link:hover {
+        .app-btn:hover {
             transform: translateY(-2px);
             opacity: 0.95;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        /* O'ng Tomondagi Sayt Oynasi */
+        .vault-content {
+            flex: 1;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .vault-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .placeholder-text {
+            color: #64748b;
+            font-size: 20px;
         }
 
         .lock-btn {
             background: #ef4444;
             color: white;
-            padding: 16px;
+            padding: 14px;
             border-radius: 14px;
             border: none;
             cursor: pointer;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             width: 100%;
-            margin-top: 15px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .lock-btn:hover {
-            background: #dc2626;
-            transform: translateY(-2px);
+            margin-top: auto;
         }
 
         .counter-footer {
-            margin-top: 30px;
-            opacity: 0.85;
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -177,35 +195,41 @@ HTML
             <button onclick="press('3')">3</button>
             <button onclick="press('0')">0</button>
         </div>
+        <div class="counter-footer">
+            <img src="https://komarev.com/ghpvc/?username=behruzismoilov820-calcualtor&label=Tashriflar&color=blue&style=flat" alt="Tashriflar soni">
+        </div>
     </div>
 
-    <!-- Yashirin Ombor Qismi (Chap tarafda joylashadi) -->
-    <div class="vault-container" id="vault">
-        <h2>🔒 Yashirin Ombor</h2>
-        <p>Ilova yoki o'yinni tanlang:</p>
-        
-        <a href="https://google.com" target="_blank" class="app-link">Google</a>
-        <a href="https://youtube.com" target="_blank" class="app-link">YouTube</a>
-        <a href="https://github.com" target="_blank" class="app-link">GitHub</a>
-        <a href="https://instagram.com" target="_blank" class="app-link" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);">Instagram</a>
-        <a href="https://yandex.com/games" target="_blank" class="app-link" style="background: #fc3f1d;">Yandex Games</a>
-        <a href="https://play-cs.com/" target="_blank" class="app-link" style="background: #10b981;">CS 1.6 Web</a>
-        
-        <button onclick="lockVault()" class="lock-btn">Qulflash</button>
-    </div>
+    <!-- Yashirin Ombor Oynasi (Menyu + Ekran) -->
+    <div class="vault-wrapper" id="vault">
+        <!-- Chap Menyu -->
+        <div class="vault-sidebar">
+            <h2>🔒 Ombor</h2>
+            <button class="app-btn" onclick="openSite('https://play-cs.com/')">CS 1.6 Web</button>
+            <button class="app-btn" style="background: #fc3f1d;" onclick="openSite('https://yandex.com/games')">Yandex Games</button>
+            <button class="app-btn" style="background: #2563eb;" onclick="openSite('https://google.com')">Google</button>
+            <button class="app-btn" style="background: #cc181e;" onclick="openSite('https://youtube.com')">YouTube</button>
+            <button class="app-btn" style="background: #24292e;" onclick="openSite('https://github.com')">GitHub</button>
+            <button class="app-btn" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);" onclick="openSite('https://instagram.com')">Instagram</button>
+            
+            <button onclick="lockVault()" class="lock-btn">Qulflash</button>
+        </div>
 
-    <!-- Tashriflar Nishoni -->
-    <div class="counter-footer">
-        <img src="https://komarev.com/ghpvc/?username=behruzismoilov820-calcualtor&label=Tashriflar&color=blue&style=flat" alt="Tashriflar soni">
+        <!-- O'ng tomonda sayt ochiladigan joy -->
+        <div class="vault-content">
+            <iframe id="siteViewer" src="" style="display:none;"></iframe>
+            <div id="placeholder" class="placeholder-text">O'ng tomonda ko'rish uchun chapdan ilovani tanlang 👈</div>
+        </div>
     </div>
 
     <script>
-        // PAROLNI O'ZGARTIRISH: Istalgan parolni shu yerga yozishingiz mumkin
         const USER_PASSWORD = "1995"; 
 
         let display = document.getElementById('display');
         let calculator = document.getElementById('calculator');
         let vault = document.getElementById('vault');
+        let siteViewer = document.getElementById('siteViewer');
+        let placeholder = document.getElementById('placeholder');
 
         function press(val) {
             display.value += val;
@@ -218,7 +242,7 @@ HTML
         function calculate() {
             if (display.value === USER_PASSWORD) {
                 calculator.style.display = 'none';
-                vault.style.display = 'block';
+                vault.style.display = 'flex';
                 clearDisplay();
                 return;
             }
@@ -230,9 +254,18 @@ HTML
             }
         }
 
+        function openSite(url) {
+            placeholder.style.display = 'none';
+            siteViewer.style.display = 'block';
+            siteViewer.src = url;
+        }
+
         function lockVault() {
             vault.style.display = 'none';
             calculator.style.display = 'block';
+            siteViewer.src = "";
+            siteViewer.style.display = 'none';
+            placeholder.style.display = 'block';
             clearDisplay();
         }
     </script>
