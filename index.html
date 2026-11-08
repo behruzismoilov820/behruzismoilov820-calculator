@@ -5,10 +5,10 @@ HTML
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kalkulyator Ombori</title>
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; touch-action: manipulation; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; justify-content: center; align-items: center;
@@ -16,6 +16,8 @@ HTML
             background: linear-gradient(135deg, #0f172a, #1e293b, #3b82f6);
             color: #fff; overflow: hidden;
         }
+
+        /* Kalkulyator Qismi */
         .calc-container {
             background: rgba(30, 41, 59, 0.85);
             backdrop-filter: blur(15px);
@@ -40,6 +42,7 @@ HTML
         button.operator { background: #f59e0b; color: white; }
         button.clear { background: #ef4444; color: white; }
 
+        /* Yashirin Ombor Oynasi */
         .vault-wrapper { display: none; width: 95vw; height: 90vh; gap: 20px; }
         .vault-sidebar {
             width: 320px; min-width: 280px; height: 100%;
@@ -52,7 +55,10 @@ HTML
             display: block; width: 100%; padding: 14px; margin-bottom: 10px;
             background: #2563eb; color: white; border: none; border-radius: 14px;
             font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s ease;
+            text-align: center;
         }
+        .app-btn:hover { transform: translateY(-2px); opacity: 0.95; }
+
         .vault-content {
             flex: 1; height: 100%; background: rgba(15, 23, 42, 0.9);
             border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.15);
@@ -61,6 +67,8 @@ HTML
         }
         .placeholder-text { color: #94a3b8; font-size: 18px; text-align: center; }
         #siteViewer { width: 100%; height: 100%; border: none; background: #fff; display: none; }
+
+        /* Ninza Futboli O'yin CSS qismi */
         #gameArea {
             display: none; width: 100%; height: 100%;
             flex-direction: column; align-items: center; justify-content: center;
@@ -72,14 +80,38 @@ HTML
             background: #2563eb; color: white; border: none; border-radius: 10px;
             font-size: 16px; font-weight: bold; cursor: pointer;
         }
-        canvas { border: 2px solid rgba(56, 189, 248, 0.3); border-radius: 12px; background: #0f172a; display: none; }
-        .controls-info { margin-top: 15px; color: #94a3b8; font-size: 13px; text-align: center; line-height: 1.5; }
+        .game-btn:hover { background: #1d4ed8; }
+        canvas {
+            border: 2px solid rgba(56, 189, 248, 0.3); border-radius: 12px;
+            background: #0f172a; display: none; max-width: 100%;
+        }
+
+        /* Telefon uchun sensorli tugmalar */
+        .touch-controls {
+            display: none; width: 100%; max-width: 600px;
+            margin-top: 10px; justify-content: space-between; gap: 8px; padding: 0 10px;
+        }
+        .touch-group { display: flex; gap: 6px; }
+        .t-btn {
+            background: #334155; color: white; border: 2px solid rgba(56, 189, 248, 0.4);
+            padding: 12px 16px; font-size: 15px; font-weight: bold; border-radius: 12px;
+            cursor: pointer; user-select: none; outline: none;
+        }
+        .t-btn:active { background: #2563eb; transform: scale(0.95); }
+
+        .controls-info { margin-top: 15px; color: #94a3b8; font-size: 12px; text-align: center; line-height: 1.4; }
         .lock-btn { background: #ef4444; color: white; padding: 14px; border-radius: 14px; border: none; cursor: pointer; font-weight: bold; width: 100%; margin-top: auto; }
         .counter-footer { margin-top: 20px; text-align: center; }
+
+        @media (max-width: 768px) {
+            .touch-controls { display: flex; }
+            canvas { width: 95%; height: 240px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Kalkulyator Qismi -->
     <div class="calc-container" id="calculator">
         <input type="text" id="display" readonly placeholder="0">
         <div class="buttons">
@@ -87,14 +119,17 @@ HTML
             <button onclick="press('/')">/</button>
             <button onclick="press('*')">*</button>
             <button class="operator" onclick="press('-')">-</button>
+            
             <button onclick="press('7')">7</button>
             <button onclick="press('8')">8</button>
             <button onclick="press('9')">9</button>
             <button class="operator" onclick="press('+')">+</button>
+            
             <button onclick="press('4')">4</button>
             <button onclick="press('5')">5</button>
             <button onclick="press('6')">6</button>
             <button class="operator" onclick="calculate()">=</button>
+            
             <button onclick="press('1')">1</button>
             <button onclick="press('2')">2</button>
             <button onclick="press('3')">3</button>
@@ -105,15 +140,18 @@ HTML
         </div>
     </div>
 
+    <!-- Yashirin Ombor Oynasi -->
     <div class="vault-wrapper" id="vault">
         <div class="vault-sidebar">
             <h2>🔒 Ombor</h2>
+            
             <button class="app-btn" style="background: #10b981;" onclick="openNinjaGame()">🥷 Ninza Soccer</button>
             <button class="app-btn" style="background: #334155;" onclick="openSite('https://play-cs.com/')">🎮 CS 1.6 Web</button>
             <button class="app-btn" style="background: #fc3f1d;" onclick="openSite('https://yandex.com/games')">🕹️ Yandex Games</button>
             <button class="app-btn" style="background: #2563eb;" onclick="openSite('https://www.bing.com')">🌐 Qidiruv (Google)</button>
             <button class="app-btn" style="background: #cc181e;" onclick="openSite('https://www.youtube-nocookie.com/embed?listType=playlist')">▶️ YouTube</button>
             <button class="app-btn" style="background: #24292e;" onclick="openSite('https://github.com/behruzismoilov820')">🐙 GitHub</button>
+            
             <button onclick="lockVault()" class="lock-btn">Qulflash</button>
         </div>
 
@@ -122,17 +160,32 @@ HTML
                 <h3>👈 Chap tomondan xohlagan ilovani tanlang</h3>
             </div>
             <iframe id="siteViewer" src=""></iframe>
+
+            <!-- Ninza Futboli O'yin Maydoni -->
             <div id="gameArea">
                 <div id="ninjaMenu">
                     <h2 style="color: #38bdf8; margin-bottom: 10px;">🥷 NINJA SOCCER ⚽</h2>
                     <button class="game-btn" onclick="startNinja(1)">1 Kishi (Bot)</button>
                     <button class="game-btn" style="background: #10b981;" onclick="startNinja(2)">2 Kishilik</button>
                     <div class="controls-info">
-                        <p><b>P1 (Qizil):</b> W, A, D | Pass: <b>S</b> | Shot: <b>E</b></p>
-                        <p><b>P2 (Ko'k):</b> I, J, L | Pass: <b>K</b> | Shot: <b>O</b></p>
+                        <p><b>PC:</b> P1 (W,A,D / S / E) | P2 (I,J,L / K / O)</p>
+                        <p><b>Telefon:</b> Sensorli tugmalar pastda chiqadi!</p>
                     </div>
                 </div>
-                <canvas id="gameCanvas" width="600" height="350"></canvas>
+                <canvas id="gameCanvas" width="600" height="320"></canvas>
+
+                <!-- Sensorli boshqaruv paneli -->
+                <div class="touch-controls" id="touchPanel">
+                    <div class="touch-group">
+                        <button class="t-btn" ontouchstart="tState.left=true" ontouchend="tState.left=false" onmousedown="tState.left=true" onmouseup="tState.left=false">◀️</button>
+                        <button class="t-btn" ontouchstart="tState.right=true" ontouchend="tState.right=false" onmousedown="tState.right=true" onmouseup="tState.right=false">▶️</button>
+                    </div>
+                    <div class="touch-group">
+                        <button class="t-btn" style="background:#059669;" ontouchstart="tState.pass=true" ontouchend="tState.pass=false" onmousedown="tState.pass=true" onmouseup="tState.pass=false">Pass</button>
+                        <button class="t-btn" style="background:#dc2626;" ontouchstart="tState.shot=true" ontouchend="tState.shot=false" onmousedown="tState.shot=true" onmouseup="tState.shot=false">Shot</button>
+                        <button class="t-btn" style="background:#2563eb;" ontouchstart="tState.jump=true" ontouchend="tState.jump=false" onmousedown="tState.jump=true" onmouseup="tState.jump=false">⬆️</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -146,15 +199,17 @@ HTML
         let siteViewer = document.getElementById('siteViewer');
         let gameArea = document.getElementById('gameArea');
         let ninjaMenu = document.getElementById('ninjaMenu');
+        let touchPanel = document.getElementById('touchPanel');
         let canvas = document.getElementById('gameCanvas');
         let ctx = canvas.getContext("2d");
 
         let gameMode = 1;
         let score1 = 0, score2 = 0;
-        let p1 = { x: 100, y: 240, w: 35, h: 60, vx: 0, vy: 0, color: "#ef4444" };
-        let p2 = { x: 465, y: 240, w: 35, h: 60, vx: 0, vy: 0, color: "#3b82f6" };
-        let ball = { x: 300, y: 150, r: 12, vx: 0, vy: 0, color: "#facc15" };
+        let p1 = { x: 100, y: 220, w: 35, h: 60, vx: 0, vy: 0, color: "#ef4444" };
+        let p2 = { x: 465, y: 220, w: 35, h: 60, vx: 0, vy: 0, color: "#3b82f6" };
+        let ball = { x: 300, y: 130, r: 12, vx: 0, vy: 0, color: "#facc15" };
         let keys = {};
+        let tState = { left: false, right: false, jump: false, pass: false, shot: false };
         let gameRunning = false;
 
         function press(val) { display.value += val; }
@@ -171,19 +226,25 @@ HTML
         }
 
         function openSite(url) {
-            gameRunning = false; gameArea.style.display = 'none';
-            placeholder.style.display = 'none'; siteViewer.style.display = 'block';
+            gameRunning = false;
+            gameArea.style.display = 'none';
+            touchPanel.style.display = 'none';
+            placeholder.style.display = 'none';
+            siteViewer.style.display = 'block';
             siteViewer.src = url;
         }
 
         function openNinjaGame() {
-            siteViewer.style.display = 'none'; siteViewer.src = "";
-            placeholder.style.display = 'none'; gameArea.style.display = 'flex';
-            ninjaMenu.style.display = 'block'; canvas.style.display = 'none';
+            siteViewer.style.display = 'none';
+            siteViewer.src = "";
+            placeholder.style.display = 'none';
+            gameArea.style.display = 'flex';
+            ninjaMenu.style.display = 'block';
+            canvas.style.display = 'none';
+            touchPanel.style.display = 'none';
             gameRunning = false;
         }
 
-        // Klaviatura tugmalarini aniqlash (kodlar bo'yicha)
         window.addEventListener("keydown", e => { keys[e.code] = true; keys[e.key.toLowerCase()] = true; });
         window.addEventListener("keyup", e => { keys[e.code] = false; keys[e.key.toLowerCase()] = false; });
 
@@ -191,6 +252,7 @@ HTML
             gameMode = mode;
             ninjaMenu.style.display = 'none';
             canvas.style.display = 'block';
+            touchPanel.style.display = 'flex';
             score1 = 0; score2 = 0;
             resetPositions();
             gameRunning = true;
@@ -198,47 +260,48 @@ HTML
         }
 
         function resetPositions() {
-            p1.x = 100; p1.y = 240; p1.vx = 0; p1.vy = 0;
-            p2.x = 465; p2.y = 240; p2.vx = 0; p2.vy = 0;
-            ball.x = 300; ball.y = 100; ball.vx = 0; ball.vy = 0;
+            p1.x = 100; p1.y = 220; p1.vx = 0; p1.vy = 0;
+            p2.x = 465; p2.y = 220; p2.vx = 0; p2.vy = 0;
+            ball.x = 300; ball.y = 90; ball.vx = 0; ball.vy = 0;
         }
 
         function update() {
             if (!gameRunning) return;
 
-            // P1 Boshqaruvi (KeyA, KeyD, KeyW, KeyS, KeyE)
-            if (keys["KeyA"] || keys["a"]) p1.vx = -4;
-            else if (keys["KeyD"] || keys["d"]) p1.vx = 4;
+            // P1 Boshqaruvi (W,A,D / S / E yoki Sensor)
+            if (keys["KeyA"] || keys["a"] || tState.left) p1.vx = -4;
+            else if (keys["KeyD"] || keys["d"] || tState.right) p1.vx = 4;
             else p1.vx = 0;
-            if ((keys["KeyW"] || keys["w"]) && p1.y >= 240) p1.vy = -11;
 
-            // P2 Boshqaruvi (KeyJ, KeyL, KeyI, KeyK, KeyO)
+            if ((keys["KeyW"] || keys["w"] || tState.jump) && p1.y >= 220) p1.vy = -11;
+
+            // P2 Boshqaruvi
             if (gameMode === 2) {
                 if (keys["KeyJ"] || keys["j"]) p2.vx = -4;
                 else if (keys["KeyL"] || keys["l"]) p2.vx = 4;
                 else p2.vx = 0;
-                if ((keys["KeyI"] || keys["i"]) && p2.y >= 240) p2.vy = -11;
+                if ((keys["KeyI"] || keys["i"]) && p2.y >= 220) p2.vy = -11;
             } else {
                 if (ball.x > p2.x + 15) p2.vx = 3;
                 else if (ball.x < p2.x - 15) p2.vx = -3;
                 else p2.vx = 0;
-                if (ball.y < p2.y && p2.y >= 240 && Math.random() < 0.03) p2.vy = -10;
+                if (ball.y < p2.y && p2.y >= 220 && Math.random() < 0.03) p2.vy = -10;
             }
 
             [p1, p2].forEach(p => {
                 p.vy += 0.5; p.y += p.vy; p.x += p.vx;
-                if (p.y > 240) { p.y = 240; p.vy = 0; }
+                if (p.y > 220) { p.y = 220; p.vy = 0; }
                 if (p.x < 0) p.x = 0; if (p.x > 565) p.x = 565;
             });
 
             if (p1.x > 260) p1.x = 260;
             if (p2.x < 300) p2.x = 300;
 
-            // PASS va SHOT
+            // Pass va Shot
             let p1Dist = Math.hypot(ball.x - (p1.x + p1.w/2), ball.y - (p1.y + p1.h/2));
             if (p1Dist < 45) {
-                if (keys["KeyS"] || keys["s"]) { ball.vx = 7; ball.vy = -4; }
-                if (keys["KeyE"] || keys["e"]) { ball.vx = 14; ball.vy = -8; }
+                if (keys["KeyS"] || keys["s"] || tState.pass) { ball.vx = 7; ball.vy = -4; }
+                if (keys["KeyE"] || keys["e"] || tState.shot) { ball.vx = 14; ball.vy = -8; }
             }
 
             let p2Dist = Math.hypot(ball.x - (p2.x + p2.w/2), ball.y - (p2.y + p2.h/2));
@@ -252,12 +315,12 @@ HTML
             if (ball.x - ball.r < 0) { ball.x = ball.r; ball.vx *= -0.8; }
             if (ball.x + ball.r > 600) { ball.x = 600 - ball.r; ball.vx *= -0.8; }
             if (ball.y - ball.r < 0) { ball.y = ball.r; ball.vy *= -0.8; }
-            if (ball.y + ball.r > 300) {
-                ball.y = 300 - ball.r; ball.vy *= -0.7; ball.vx *= 0.95;
+            if (ball.y + ball.r > 280) {
+                ball.y = 280 - ball.r; ball.vy *= -0.7; ball.vx *= 0.95;
             }
 
-            if (ball.x - ball.r < 40 && ball.y > 180) { score2++; resetPositions(); }
-            if (ball.x + ball.r > 560 && ball.y > 180) { score1++; resetPositions(); }
+            if (ball.x - ball.r < 40 && ball.y > 160) { score2++; resetPositions(); }
+            if (ball.x + ball.r > 560 && ball.y > 160) { score1++; resetPositions(); }
 
             [p1, p2].forEach(p => {
                 let cx = Math.max(p.x, Math.min(ball.x, p.x + p.w));
@@ -273,10 +336,10 @@ HTML
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.strokeStyle = "rgba(255,255,255,0.3)"; ctx.lineWidth = 3;
-            ctx.strokeRect(0, 180, 40, 120); ctx.strokeRect(560, 180, 40, 120);
-            ctx.fillStyle = "#334155"; ctx.fillRect(0, 300, 600, 50);
-            ctx.fillStyle = "#fff"; ctx.font = "bold 24px Segoe UI"; ctx.textAlign = "center";
-            ctx.fillText(`${score1} : ${score2}`, 300, 40);
+            ctx.strokeRect(0, 160, 40, 120); ctx.strokeRect(560, 160, 40, 120);
+            ctx.fillStyle = "#334155"; ctx.fillRect(0, 280, 600, 40);
+            ctx.fillStyle = "#fff"; ctx.font = "bold 22px Segoe UI"; ctx.textAlign = "center";
+            ctx.fillText(`${score1} : ${score2}`, 300, 35);
             ctx.fillStyle = p1.color; ctx.fillRect(p1.x, p1.y, p1.w, p1.h);
             ctx.beginPath(); ctx.arc(p1.x + p1.w/2, p1.y + 12, 12, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = p2.color; ctx.fillRect(p2.x, p2.y, p2.w, p2.h);
@@ -291,7 +354,8 @@ HTML
 
         function lockVault() {
             gameRunning = false; vault.style.display = 'none'; calculator.style.display = 'block';
-            gameArea.style.display = 'none'; siteViewer.style.display = 'none'; siteViewer.src = "";
+            gameArea.style.display = 'none'; touchPanel.style.display = 'none';
+            siteViewer.style.display = 'none'; siteViewer.src = "";
             placeholder.style.display = 'block'; clearDisplay();
         }
     </script>
